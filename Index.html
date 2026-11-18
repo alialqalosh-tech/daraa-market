@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سوق درعا الإلكتروني | بإشراف الوسيط المعتمد</title>
+
+  <!-- Google Font: Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Cairo', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              emerald: '#059669',
+              slate: '#0f172a',
+              gold: '#d97706',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      font-family: 'Cairo', sans-serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes modalPop {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    .animate-modal {
+      animation: modalPop 0.2s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 overflow-x-hidden">
+
+  <!-- Toast Notifications Container -->
+  <div id="toastContainer" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ===================================================================== -->
+  <!-- TOP NAVIGATION HEADER                                                 -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-30 bg-[#0f172a] text-white border-b border-slate-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+        
+        <!-- Brand Logo & Title -->
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 cursor-pointer" onclick="resetFilters()">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#059669] to-emerald-700 flex items-center justify-center text-white shadow-md shadow-emerald-950/50 border border-emerald-400/30 shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h1 class="text-lg sm:text-xl font-black tracking-tight text-white">
+                  سوق درعا الإلكتروني
+                </h1>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#d97706]/20 text-amber-300 border border-[#d97706]/40">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                  <span>الوسيط المعتمد</span>
+                </span>
+              </div>
+              <p class="text-xs text-slate-300 font-medium mt-0.5">
+                بإشراف الوسيط المعتمد • بيع وشراء بأمان في كافة مناطق درعا
+              </p>
+            </div>
+          </div>
+
+          <!-- Theme Toggle (Mobile top-left placement) -->
+          <button
+            type="button"
+            onclick="toggleTheme()"
+            aria-label="تبديل المظهر"
+            class="lg:hidden p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer shrink-0"
+          >
+            <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg class="w-5 h-5 block dark:hidden text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Action Buttons Row -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          <!-- Primary CTA: Sell Item -->
+          <button
+            type="button"
+            onclick="openSellModal()"
+            class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#059669] hover:bg-emerald-500 active:scale-[0.98] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-950/50 transition cursor-pointer"
+          >
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>+ اعرض غرضك للبيع</span>
+          </button>
+
+          <!-- Share Market Link Button -->
+          <button
+            type="button"
+            onclick="shareMarketLink()"
+            class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs sm:text-sm border border-slate-700 transition cursor-pointer"
+            title="مشاركة رابط السوق"
+          >
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+            <span>مشاركة رابط السوق</span>
+          </button>
+
+          <!-- Broker Admin Panel Button -->
+          <button
+            type="button"
+            onclick="openAdminAccess()"
+            class="relative inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold text-xs sm:text-sm border border-slate-700 transition cursor-pointer"
+          >
+            <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>إدارة الوسيط</span>
+            <span id="pendingBadgeHeader" class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 rounded-full bg-[#d97706] text-white text-[11px] font-black flex items-center justify-center shadow">
+              0
+            </span>
+          </button>
+
+          <!-- Desktop Theme Toggle -->
+          <button
+            type="button"
+            onclick="toggleTheme()"
+            aria-label="تبديل المظهر"
+            class="hidden lg:inline-flex p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer"
+          >
+            <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg class="w-5 h-5 block dark:hidden text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- HERO BANNER & BROKER TRUST SYSTEM EXPLANATION                         -->
+  <!-- ===================================================================== -->
+  <section class="bg-gradient-to-b from-[#0f172a] via-slate-900 to-slate-50 dark:to-slate-950 text-white pt-4 pb-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="rounded-2xl bg-slate-800/80 border border-slate-700/80 p-4 sm:p-6 shadow-xl backdrop-blur">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div class="space-y-2 max-w-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+              <span id="cloudStatusDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span id="cloudStatusText">متصل مباشرة • تحديث فوري لجميع العروض في درعا</span>
+            </div>
+            <h2 class="text-lg sm:text-2xl font-black text-white leading-snug">
+              تصفح العروض أو اعرض أغراضك المستعملة والجديدة للبيع مجاناً
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              نعمل بنظام <span class="text-amber-400 font-bold">الوسيط المعتمد</span> لحماية خصوصية أرقام البائعين وضمان جدية المشترين في جميع مدن وبلدات محافظة درعا.
+            </p>
+          </div>
+
+          <!-- 3 Trust Pillars -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 shrink-0">
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-[#059669] text-white font-black text-xs flex items-center justify-center shrink-0">1</span>
+              <div class="text-xs">
+                <div class="font-extrabold text-white">أضف غرضك مجاناً</div>
+                <div class="text-slate-400">رقمك سري لدى الوسيط</div>
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-[#d97706] text-white font-black text-xs flex items-center justify-center shrink-0">2</span>
+              <div class="text-xs">
+                <div class="font-extrabold text-white">اطلب عبر واتساب</div>
+                <div class="text-slate-400">مباشرة مع الوسيط</div>
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-[#059669] text-white font-black text-xs flex items-center justify-center shrink-0">3</span>
+              <div class="text-xs">
+                <div class="font-extrabold text-white">معاينة وتسليم آمن</div>
+                <div class="text-slate-400">بكل مناطق حوران</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN PUBLIC STOREFRONT                                                -->
+  <!-- ===================================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-6">
+
+    <!-- Search, Area Filter & Scrollable Categories -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-3.5">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+        
+        <!-- Search by Keyword or Listing Code -->
+        <div class="md:col-span-6 relative">
+          <input
+            type="text"
+            id="searchInput"
+            oninput="applyFilters()"
+            placeholder="ابحث بالاسم أو كود الإعلان... (مثال: موبايل، غسالة، DR-101)"
+            class="w-full pr-10 pl-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#059669] transition"
+          />
+          <svg class="w-5 h-5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+
+        <!-- Daraa Governorate Area Filter -->
+        <div class="md:col-span-4">
+          <select
+            id="areaFilter"
+            onchange="applyFilters()"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669] transition cursor-pointer"
+          >
+            <option value="all">📍 كل مناطق درعا</option>
+            <option value="درعا المحطة">درعا المحطة</option>
+            <option value="درعا البلد">درعا البلد</option>
+            <option value="إزرع">إزرع</option>
+            <option value="نوى">نوى</option>
+            <option value="الصنمين">الصنمين</option>
+            <option value="طفس">طفس</option>
+            <option value="بصرى الشام">بصرى الشام</option>
+            <option value="داعل">داعل</option>
+            <option value="خربة غزالة">خربة غزالة</option>
+            <option value="الحراك">الحراك</option>
+            <option value="جاسم">جاسم</option>
+            <option value="إنخل">إنخل</option>
+            <option value="الشيخ مسكين">الشيخ مسكين</option>
+            <option value="المزيريب">المزيريب</option>
+          </select>
+        </div>
+
+        <!-- Sort Order -->
+        <div class="md:col-span-2">
+          <select
+            id="sortFilter"
+            onchange="applyFilters()"
+            class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669] transition cursor-pointer"
+          >
+            <option value="newest">🕒 الأحدث</option>
+            <option value="price_asc">💰 الأرخص</option>
+            <option value="price_desc">💎 الأغلى</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Horizontal Scrollable Category Pills -->
+      <div id="categoryPills" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1 pb-0.5">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Results Counter & Direct Broker WhatsApp Contact -->
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+          الإعلانات المتوفرة حالياً
+        </h3>
+        <span id="resultsCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 dark:bg-emerald-950 text-[#059669] dark:text-emerald-400">
+          0 إعلان
+        </span>
+      </div>
+      <div class="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+        <span>للاستفسار المباشر مع الوسيط:</span>
+        <a id="headerBrokerWaLink" href="https://wa.me/963995474645" target="_blank" rel="noopener noreferrer" dir="ltr" class="font-extrabold text-[#059669] dark:text-emerald-400 hover:underline">
+          0995474645
+        </a>
+      </div>
+    </div>
+
+    <!-- Loading Skeleton Grid -->
+    <div id="loadingGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse">
+        <div class="aspect-[4/3] rounded-xl bg-slate-200 dark:bg-slate-800"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+        <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+        <div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-full"></div>
+      </div>
+      <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse hidden sm:block">
+        <div class="aspect-[4/3] rounded-xl bg-slate-200 dark:bg-slate-800"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+        <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+        <div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-full"></div>
+      </div>
+      <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse hidden lg:block">
+        <div class="aspect-[4/3] rounded-xl bg-slate-200 dark:bg-slate-800"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+        <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+        <div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-full"></div>
+      </div>
+      <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse hidden xl:block">
+        <div class="aspect-[4/3] rounded-xl bg-slate-200 dark:bg-slate-800"></div>
+        <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+        <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+        <div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-full"></div>
+      </div>
+    </div>
+
+    <!-- Storefront Product Cards Grid -->
+    <div id="productsGrid" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <!-- Cards injected dynamically -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden flex-col items-center justify-center text-center py-14 px-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+      <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-3">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <h4 class="text-lg font-extrabold text-slate-900 dark:text-white">لا توجد إعلانات مطابقة لبحثك حالياً</h4>
+      <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mt-1">
+        جرّب اختيار قسم أو منطقة أخرى، أو اعرض غرضك للبيع مجاناً ليراه أهالي درعا!
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-5">
+        <button type="button" onclick="resetFilters()" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-extrabold text-slate-700 dark:text-slate-200 transition cursor-pointer">
+          عرض جميع الإعلانات
+        </button>
+        <button type="button" onclick="openSellModal()" class="px-4 py-2.5 rounded-xl bg-[#059669] hover:bg-emerald-500 text-xs font-extrabold text-white transition cursor-pointer">
+          + اعرض غرضك للبيع مجاناً
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER                                                                -->
+  <!-- ===================================================================== -->
+  <footer class="bg-[#0f172a] text-slate-300 border-t border-slate-800 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm">
+        <div class="flex items-center gap-2 font-extrabold text-white">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#059669]"></span>
+          <span>سوق درعا الإلكتروني © 2026 - بإشراف الوسيط المعتمد</span>
+        </div>
+        <div class="text-center sm:text-left text-slate-400">
+          <span>منصة آمنة للبيع والشراء في كافة مدن وبلدات محافظة درعا</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: PRODUCT DETAILS MODAL (PUBLIC - NO SELLER PHONE OR NAME)     -->
+  <!-- ===================================================================== -->
+  <div id="itemDetailsModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl animate-modal">
+      <div class="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2">
+          <span id="detailCodeBadge" class="px-2.5 py-1 rounded-lg bg-[#0f172a] text-white text-xs font-extrabold" dir="ltr">#DR-101</span>
+          <span id="detailStatusBadge" class="px-2.5 py-1 rounded-lg text-xs font-extrabold">متاح</span>
+        </div>
+        <button type="button" onclick="closeModal('itemDetailsModal')" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-5">
+        <!-- Photo or Category Fallback -->
+        <div id="detailVisualContainer" class="aspect-[16/10] w-full rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 relative">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+            <span id="detailCategory" class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-[#059669] dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">التصنيف</span>
+            <span id="detailArea" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">📍 المنطقة</span>
+            <span id="detailCondition" class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-[#d97706] dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">الحالة</span>
+          </div>
+
+          <h3 id="detailTitle" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white pt-1">
+            اسم الغرض
+          </h3>
+
+          <div id="detailPrice" class="text-2xl font-black text-[#059669] dark:text-emerald-400">
+            0 ل.س
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+          <div class="text-xs font-extrabold text-slate-500 dark:text-slate-400">وصف وتفاصيل الغرض:</div>
+          <p id="detailDescription" class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">
+            التفاصيل...
+          </p>
+        </div>
+
+        <!-- Broker Safety Assurance -->
+        <div class="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 flex items-start gap-3">
+          <svg class="w-5 h-5 text-[#059669] dark:text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <p class="text-xs text-emerald-950 dark:text-emerald-200 leading-relaxed">
+            <strong>تعامل آمن عبر الوسيط المعتمد:</strong> جميع الطلبات والمعاينات تتم بالتنسيق المباشر مع وسيط سوق درعا الإلكتروني لضمان الجدية وحفظ حقوق الطرفين.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 pt-1">
+          <a
+            id="detailWhatsAppBtn"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#059669] hover:bg-emerald-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-600/20 transition cursor-pointer"
+          >
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+            </svg>
+            <span>اطلب عبر الوسيط (واتساب)</span>
+          </a>
+
+          <button
+            type="button"
+            onclick="copyCurrentItemCode()"
+            class="px-4 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-sm border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+          >
+            نسخ كود الإعلان
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: VISITOR LISTING SUBMISSION ("+ اعرض غرضك للبيع مجاناً")      -->
+  <!-- ===================================================================== -->
+  <div id="sellModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-xl w-full max-h-[92vh] overflow-y-auto shadow-2xl animate-modal">
+      <div class="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <h3 class="text-lg font-black text-slate-900 dark:text-white">+ اعرض غرضك للبيع مجاناً</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">سيصل إعلانك للوسيط المعتمد مباشرة لمراجعته ونشره في السوق</p>
+        </div>
+        <button type="button" onclick="closeModal('sellModal')" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="sellForm" onsubmit="handleSellerSubmit(event)" class="p-5 space-y-4">
+        
+        <!-- Item Name -->
+        <div>
+          <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">
+            اسم الغرض <span class="text-rose-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="sellTitle"
+            required
+            maxlength="95"
+            placeholder="مثال: هاتف شاومي ريدمي نوت 13 مستعمل بحالة ممتازة"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+          />
+        </div>
+
+        <!-- Category & Condition -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">
+              التصنيف <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="sellCategory"
+              required
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+            >
+              <option value="إلكترونيات وموبايلات">إلكترونيات وموبايلات</option>
+              <option value="أثاث ومفروشات">أثاث ومفروشات</option>
+              <option value="أدوات منزلية">أدوات منزلية</option>
+              <option value="سيارات ودراجات نارية">سيارات ودراجات نارية</option>
+              <option value="ملابس وإكسسوارات">ملابس وإكسسوارات</option>
+              <option value="أدوات زراعية وصناعية">أدوات زراعية وصناعية</option>
+              <option value="متنوعات">متنوعات</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">
+              الحالة <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="sellCondition"
+              required
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+            >
+              <option value="مستعمل - بحالة ممتازة">مستعمل - بحالة ممتازة</option>
+              <option value="مستعمل - بحالة جيدة">مستعمل - بحالة جيدة</option>
+              <option value="جديد">جديد</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Price, Currency & Daraa Area -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <div class="sm:col-span-5">
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">
+              السعر المطلوب <span class="text-rose-500">*</span>
+            </label>
+            <input
+              type="number"
+              id="sellPrice"
+              required
+              min="1"
+              step="any"
+              placeholder="مثال: 1500000"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+            />
+          </div>
+
+          <div class="sm:col-span-3">
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">
+              العملة
+            </label>
+            <select
+              id="sellCurrency"
+              class="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+            >
+              <option value="ل.س">ليرة سورية (ل.س)</option>
+              <option value="$">دولار ($)</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-4">
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">
+              المنطقة في درعا <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="sellArea"
+              required
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+            >
+              <option value="درعا المحطة">درعا المحطة</option>
+              <option value="درعا البلد">درعا البلد</option>
+              <option value="إزرع">إزرع</option>
+              <option value="نوى">نوى</option>
+              <option value="الصنمين">الصنمين</option>
+              <option value="طفس">طفس</option>
+              <option value="بصرى الشام">بصرى الشام</option>
+              <option value="داعل">داعل</option>
+              <option value="خربة غزالة">خربة غزالة</option>
+              <option value="الحراك">الحراك</option>
+              <option value="جاسم">جاسم</option>
+              <option value="إنخل">إنخل</option>
+              <option value="الشيخ مسكين">الشيخ مسكين</option>
+              <option value="المزيريب">المزيريب</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">
+            وصف وتفاصيل الغرض <span class="text-rose-500">*</span>
+          </label>
+          <textarea
+            id="sellDescription"
+            required
+            rows="3"
+            maxlength="650"
+            placeholder="اذكر المواصفات، مدة الاستعمال، النظافة، وأي ملحقات متوفرة..."
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+          ></textarea>
+        </div>
+
+        <!-- Client-side Compressed Image Upload (Max 800px, JPEG 0.72) -->
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <label class="text-xs font-extrabold text-slate-700 dark:text-slate-300">
+              صورة الغرض (اختياري - من الكاميرا أو المعرض)
+            </label>
+            <span id="imageUploadStatus" class="text-[11px] font-bold text-[#059669] dark:text-emerald-400"></span>
+          </div>
+
+          <label class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 hover:border-[#059669] dark:hover:border-emerald-500 bg-white dark:bg-slate-900 text-xs font-extrabold text-slate-700 dark:text-slate-200 cursor-pointer transition">
+            <svg class="w-5 h-5 text-[#059669] dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>اضغط لالتقاط صورة أو اختيارها من الاستوديو</span>
+            <input type="file" id="sellImageFile" accept="image/*" onchange="handleImageFileSelect(event)" class="hidden" />
+          </label>
+
+          <!-- Live Image Preview -->
+          <div id="sellImagePreviewBox" class="hidden relative w-36 h-24 rounded-xl overflow-hidden border border-slate-300 dark:border-slate-600 shadow-sm">
+            <img id="sellImagePreview" src="" alt="معاينة الصورة" class="w-full h-full object-cover" />
+            <button type="button" onclick="clearSelectedImage()" title="حذف الصورة" class="absolute top-1 left-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs font-bold flex items-center justify-center shadow cursor-pointer">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- PRIVATE SELLER DETAILS BOX -->
+        <div class="p-4 rounded-xl bg-amber-50/80 dark:bg-amber-950/25 border border-amber-300/80 dark:border-amber-800/60 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-black text-xs">
+            <svg class="w-4 h-4 shrink-0 text-[#d97706]" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span>بياناتك السرية (تظهر للوسيط فقط ولا تُنشر للعامة)</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">
+                اسم البائع <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="sellSellerName"
+                required
+                placeholder="مثال: أبو أحمد"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">
+                رقم واتساب البائع <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="tel"
+                id="sellSellerPhone"
+                required
+                dir="ltr"
+                placeholder="09xxxxxxxx"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-right text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+              />
+            </div>
+          </div>
+
+          <p class="text-[11px] text-amber-900/90 dark:text-amber-300/80 leading-relaxed">
+            🔒 نضمن عدم ظهور اسمك أو رقمك لأي زائر؛ يتواصل معك الوسيط فقط عند وجود مشتري جاد.
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          id="sellSubmitBtn"
+          class="w-full py-3.5 rounded-xl bg-[#059669] hover:bg-emerald-500 text-white font-black text-sm shadow-lg shadow-emerald-600/20 transition cursor-pointer"
+        >
+          إرسال الغرض إلى الوسيط
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 3: ADMIN PIN LOGIN MODAL                                        -->
+  <!-- ===================================================================== -->
+  <div id="adminPinModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl animate-modal space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-[#059669] dark:text-emerald-400 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-slate-900 dark:text-white">دخول إدارة الوسيط</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">لوحة التحكم الخاصة بصاحب السوق</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('adminPinModal')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <form onsubmit="verifyAdminPin(event)" class="space-y-3">
+        <input
+          type="password"
+          id="adminPinInput"
+          inputmode="numeric"
+          maxlength="12"
+          required
+          placeholder="أدخل رمز PIN..."
+          class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center text-lg font-black tracking-widest text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+        />
+        <p id="pinErrorText" class="hidden text-xs font-bold text-rose-500 text-center">
+          رمز الدخول غير صحيح، حاول مجدداً.
+        </p>
+        <p class="text-[11px] text-slate-500 dark:text-slate-400 text-center">
+          الرمز الافتراضي: <span class="font-extrabold text-[#059669] dark:text-emerald-400">1234</span> (يمكنك تغييره من إعدادات الوسيط)
+        </p>
+        <button type="submit" class="w-full py-3 rounded-xl bg-[#059669] hover:bg-emerald-500 text-white font-extrabold text-sm transition cursor-pointer">
+          دخول لوحة الوسيط
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 4: BROKER ADMIN PANEL ("إدارة الوسيط")                          -->
+  <!-- ===================================================================== -->
+  <div id="adminDashboardModal" class="fixed inset-0 z-40 hidden items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-5xl w-full h-[92vh] flex flex-col shadow-2xl animate-modal overflow-hidden">
+      
+      <!-- Top Header -->
+      <div class="px-5 py-4 bg-[#0f172a] text-white flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-[#059669] text-white flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-black">لوحة إدارة الوسيط - سوق درعا الإلكتروني</h3>
+            <p class="text-xs text-slate-300">مراجعة الطلبات، التواصل السري مع البائعين، وإدارة المتجر</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="logoutAdmin()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30 transition cursor-pointer">
+            قفل اللوحة
+          </button>
+          <button type="button" onclick="closeModal('adminDashboardModal')" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Summary KPI Counters -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 px-5 py-3.5 bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800">
+        <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-center">
+          <div id="kpiPendingCount" class="text-xl font-black text-[#d97706] dark:text-amber-400">0</div>
+          <div class="text-[11px] font-extrabold text-slate-700 dark:text-slate-300">بانتظار الموافقة</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 text-center">
+          <div id="kpiApprovedCount" class="text-xl font-black text-[#059669] dark:text-emerald-400">0</div>
+          <div class="text-[11px] font-extrabold text-slate-700 dark:text-slate-300">منشور حالياً</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/50 text-center">
+          <div id="kpiSoldCount" class="text-xl font-black text-rose-600 dark:text-rose-400">0</div>
+          <div class="text-[11px] font-extrabold text-slate-700 dark:text-slate-300">تم البيع</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-center">
+          <div id="kpiTotalCount" class="text-xl font-black text-slate-800 dark:text-white">0</div>
+          <div class="text-[11px] font-extrabold text-slate-700 dark:text-slate-300">إجمالي الإعلانات</div>
+        </div>
+      </div>
+
+      <!-- Main Admin Navigation Tabs -->
+      <div class="flex items-center gap-2 px-5 pt-2.5 border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar">
+        <button type="button" id="tabBtnListings" onclick="switchAdminTab('listings')" class="px-4 py-2.5 text-xs sm:text-sm font-black border-b-2 border-[#059669] text-[#059669] dark:text-emerald-400 whitespace-nowrap cursor-pointer">
+          الإعلانات وبيانات البائعين
+        </button>
+        <button type="button" id="tabBtnDirectAdd" onclick="switchAdminTab('directAdd')" class="px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white whitespace-nowrap cursor-pointer">
+          + إضافة إعلان مباشر
+        </button>
+        <button type="button" id="tabBtnSettings" onclick="switchAdminTab('settings')" class="px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white whitespace-nowrap cursor-pointer">
+          إعدادات الوسيط
+        </button>
+      </div>
+
+      <!-- Scrollable Admin Content -->
+      <div class="flex-1 overflow-y-auto p-5">
+        
+        <!-- TAB 1: LISTINGS & PRIVATE SELLER CONTACTS -->
+        <div id="adminTabListings" class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <!-- Status Filter Tabs -->
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button type="button" onclick="setAdminStatusFilter('pending')" id="adminFilterPending" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer">
+                بانتظار الموافقة
+              </button>
+              <button type="button" onclick="setAdminStatusFilter('approved')" id="adminFilterApproved" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer">
+                منشور حالياً
+              </button>
+              <button type="button" onclick="setAdminStatusFilter('sold')" id="adminFilterSold" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer">
+                تم البيع
+              </button>
+              <button type="button" onclick="setAdminStatusFilter('all')" id="adminFilterAll" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-[#059669] text-white cursor-pointer">
+                الكل
+              </button>
+            </div>
+
+            <!-- Admin Search -->
+            <input
+              type="text"
+              id="adminSearchInput"
+              oninput="renderAdminListings()"
+              placeholder="بحث بالكود، الغرض، اسم البائع أو رقمه..."
+              class="sm:w-72 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#059669]"
+            />
+          </div>
+
+          <div id="adminListingsContainer" class="space-y-3">
+            <!-- Admin Listing Cards Injected Here -->
+          </div>
+        </div>
+
+        <!-- TAB 2: DIRECT BROKER ADD LISTING ("+ إضافة إعلان مباشر") -->
+        <div id="adminTabDirectAdd" class="hidden max-w-xl mx-auto">
+          <form id="adminAddForm" onsubmit="handleAdminDirectAdd(event)" class="space-y-4 bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <div>
+              <h4 class="text-base font-black text-slate-900 dark:text-white">+ إضافة إعلان مباشر من الوسيط</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">يُعرض هذا الغرض مباشرة في واجهة السوق للزوار بدون انتظار الموافقة.</p>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">اسم الغرض *</label>
+              <input type="text" id="adminAddTitle" required placeholder="مثال: براد سامسونج 18 قدم بحالة ممتازة" class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">التصنيف</label>
+                <select id="adminAddCategory" class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+                  <option value="إلكترونيات وموبايلات">إلكترونيات وموبايلات</option>
+                  <option value="أثاث ومفروشات">أثاث ومفروشات</option>
+                  <option value="أدوات منزلية">أدوات منزلية</option>
+                  <option value="سيارات ودراجات نارية">سيارات ودراجات نارية</option>
+                  <option value="ملابس وإكسسوارات">ملابس وإكسسوارات</option>
+                  <option value="أدوات زراعية وصناعية">أدوات زراعية وصناعية</option>
+                  <option value="متنوعات">متنوعات</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">الحالة</label>
+                <select id="adminAddCondition" class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+                  <option value="مستعمل - بحالة ممتازة">مستعمل - بحالة ممتازة</option>
+                  <option value="مستعمل - بحالة جيدة">مستعمل - بحالة جيدة</option>
+                  <option value="جديد">جديد</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">السعر *</label>
+                <input type="number" id="adminAddPrice" required min="1" step="any" placeholder="1200000" class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">العملة</label>
+                <select id="adminAddCurrency" class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+                  <option value="ل.س">ل.س</option>
+                  <option value="$">$</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">المنطقة</label>
+                <select id="adminAddArea" class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+                  <option value="درعا المحطة">درعا المحطة</option>
+                  <option value="درعا البلد">درعا البلد</option>
+                  <option value="إزرع">إزرع</option>
+                  <option value="نوى">نوى</option>
+                  <option value="الصنمين">الصنمين</option>
+                  <option value="طفس">طفس</option>
+                  <option value="بصرى الشام">بصرى الشام</option>
+                  <option value="داعل">داعل</option>
+                  <option value="خربة غزالة">خربة غزالة</option>
+                  <option value="الحراك">الحراك</option>
+                  <option value="جاسم">جاسم</option>
+                  <option value="إنخل">إنخل</option>
+                  <option value="الشيخ مسكين">الشيخ مسكين</option>
+                  <option value="المزيريب">المزيريب</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">وصف وتفاصيل الغرض *</label>
+              <textarea id="adminAddDescription" required rows="3" placeholder="اكتب مواصفات الغرض..." class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">اسم البائع (سري للوسيط)</label>
+                <input type="text" id="adminAddSellerName" placeholder="مثال: بضاعة الوسيط / أبو خلدون" class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">هاتف البائع (سري للوسيط)</label>
+                <input type="tel" id="adminAddSellerPhone" dir="ltr" placeholder="09xxxxxxxx" class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-right text-slate-900 dark:text-white" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">صورة الغرض (اختياري)</label>
+              <label class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-xs font-bold cursor-pointer hover:border-[#059669]">
+                <span>اختر صورة من جهازك</span>
+                <input type="file" id="adminAddImageFile" accept="image/*" onchange="handleAdminImageFileSelect(event)" class="hidden" />
+              </label>
+              <span id="adminImageUploadStatus" class="text-xs text-[#059669] dark:text-emerald-400 font-bold block mt-1"></span>
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-xl bg-[#059669] hover:bg-emerald-500 text-white font-black text-sm transition cursor-pointer">
+              نشر الإعلان مباشرة في السوق
+            </button>
+          </form>
+        </div>
+
+        <!-- TAB 3: BROKER SETTINGS ("إعدادات الوسيط") -->
+        <div id="adminTabSettings" class="hidden max-w-xl mx-auto space-y-5">
+          <form onsubmit="saveBrokerSettings(event)" class="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+            <h4 class="text-base font-black text-slate-900 dark:text-white">إعدادات الوسيط المعتمد</h4>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">
+                رقم واتساب الوسيط (تُرسل إليه كافة طلبات الشراء)
+              </label>
+              <input
+                type="tel"
+                id="settingBrokerPhone"
+                dir="ltr"
+                required
+                placeholder="0995474645"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-right font-extrabold text-slate-900 dark:text-white"
+              />
+              <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                الافتراضي: 0995474645 — يتم تحويله تلقائياً للصيغة الدولية 963 عند فتح واتساب.
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+              <div>
+                <div class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white">الموافقة المسبقة قبل نشر إعلانات الزوار</div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400">عند التفعيل، تصل إعلانات الزوار لقائمة "بانتظار الموافقة" لتراجعها قبل نشرها</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer shrink-0 mr-3">
+                <input type="checkbox" id="settingRequireApproval" class="sr-only peer" />
+                <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#059669]"></div>
+              </label>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">
+                تغيير رمز دخول الإدارة (PIN)
+              </label>
+              <input
+                type="text"
+                id="settingAdminPin"
+                required
+                minlength="4"
+                maxlength="12"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm font-extrabold text-slate-900 dark:text-white"
+              />
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-xl bg-[#059669] hover:bg-emerald-500 text-white font-black text-sm transition cursor-pointer">
+              حفظ الإعدادات
+            </button>
+          </form>
+
+          <!-- Sample Cleanup Box -->
+          <div class="p-4 rounded-2xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="text-xs font-black text-rose-700 dark:text-rose-400">حذف الإعلانات التجريبية الافتراضية</div>
+              <div class="text-[11px] text-slate-600 dark:text-slate-400">إزالة الأمثلة الأربعة دفعة واحدة عند بدء استقبال إعلاناتك الحقيقية</div>
+            </div>
+            <button type="button" onclick="confirmDeleteSampleItems()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold transition shrink-0 cursor-pointer">
+              حذف الإعلانات التجريبية
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 5: QUICK PRICE & DETAILS EDIT MODAL (ADMIN)                     -->
+  <!-- ===================================================================== -->
+  <div id="editItemModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 shadow-2xl animate-modal space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+        <h3 class="text-base font-black text-slate-900 dark:text-white">تعديل السعر وبيانات الإعلان</h3>
+        <button type="button" onclick="closeModal('editItemModal')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white cursor-pointer">✕</button>
+      </div>
+
+      <form onsubmit="handleSaveEditItem(event)" class="space-y-3">
+        <input type="hidden" id="editItemId" />
+        <div>
+          <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">اسم الغرض</label>
+          <input type="text" id="editTitle" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">السعر</label>
+            <input type="number" id="editPrice" required min="1" step="any" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-900 dark:text-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">العملة</label>
+            <select id="editCurrency" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+              <option value="ل.س">ل.س</option>
+              <option value="$">$</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">المنطقة</label>
+            <select id="editArea" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+              <option value="درعا المحطة">درعا المحطة</option>
+              <option value="درعا البلد">درعا البلد</option>
+              <option value="إزرع">إزرع</option>
+              <option value="نوى">نوى</option>
+              <option value="الصنمين">الصنمين</option>
+              <option value="طفس">طفس</option>
+              <option value="بصرى الشام">بصرى الشام</option>
+              <option value="داعل">داعل</option>
+              <option value="خربة غزالة">خربة غزالة</option>
+              <option value="الحراك">الحراك</option>
+              <option value="جاسم">جاسم</option>
+              <option value="إنخل">إنخل</option>
+              <option value="الشيخ مسكين">الشيخ مسكين</option>
+              <option value="المزيريب">المزيريب</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">حالة الإعلان</label>
+            <select id="editStatus" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
+              <option value="approved">منشور حالياً (متاح)</option>
+              <option value="pending">بانتظار الموافقة</option>
+              <option value="sold">تم البيع</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">الوصف</label>
+          <textarea id="editDescription" rows="3" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('editItemModal')" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">إلغاء</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#059669] hover:bg-emerald-500 text-white text-xs font-black cursor-pointer">حفظ التعديلات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 6: CUSTOM CONFIRMATION MODAL (REPLACES window.confirm)          -->
+  <!-- ===================================================================== -->
+  <div id="customConfirmModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl animate-modal space-y-4 text-center">
+      <div class="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <div class="space-y-1">
+        <h4 id="confirmTitle" class="text-base font-black text-slate-900 dark:text-white">تأكيد الإجراء</h4>
+        <p id="confirmMessage" class="text-xs text-slate-500 dark:text-slate-400">هل أنت متأكد من المتابعة؟</p>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="closeModal('customConfirmModal')" class="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+          تراجع
+        </button>
+        <button type="button" id="confirmExecuteBtn" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black cursor-pointer">
+          نعم، تأكيد
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- REAL-TIME CLOUD & APPLICATION SCRIPT                                  -->
+  <!-- ===================================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      collection
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // =========================================================================
+    // 1. CATEGORIES, INITIAL SEED ITEMS & APPLICATION STATE
+    // =========================================================================
+    const CATEGORIES = [
+      { id: 'all', label: 'الكل', icon: '🏪', accent: 'from-emerald-600 to-slate-800' },
+      { id: 'إلكترونيات وموبايلات', label: 'إلكترونيات وموبايلات', icon: '📱', accent: 'from-sky-700 to-slate-900' },
+      { id: 'أثاث ومفروشات', label: 'أثاث ومفروشات', icon: '🛋️', accent: 'from-amber-700 to-slate-900' },
+      { id: 'أدوات منزلية', label: 'أدوات منزلية', icon: '🧺', accent: 'from-teal-700 to-slate-900' },
+      { id: 'سيارات ودراجات نارية', label: 'سيارات ودراجات نارية', icon: '🏍️', accent: 'from-emerald-700 to-slate-900' },
+      { id: 'ملابس وإكسسوارات', label: 'ملابس وإكسسوارات', icon: '👕', accent: 'from-indigo-700 to-slate-900' },
+      { id: 'أدوات زراعية وصناعية', label: 'أدوات زراعية وصناعية', icon: '🚜', accent: 'from-lime-700 to-slate-900' },
+      { id: 'متنوعات', label: 'متنوعات', icon: '📦', accent: 'from-slate-700 to-slate-900' }
+    ];
+
+    const INITIAL_DARAA_SEED = [
+      {
+        code: 'DR-101',
+        title: 'هاتف شاومي ريدمي نوت 13 مستعمل بحالة ممتازة',
+        category: 'إلكترونيات وموبايلات',
+        condition: 'مستعمل - بحالة ممتازة',
+        price: 1850000,
+        currency: 'ل.س',
+        area: 'درعا المحطة',
+        description: 'ذاكرة 256 جيجا، رام 8 جيجا، نظافة 98% خالي من الخدوش أو الصيانة، مع العلبة والشاحن الأصلي وبيت حماية.',
+        imageUrl: '',
+        sellerName: 'أبو عمر الدرعاوي',
+        sellerPhone: '0933112233',
+        status: 'approved',
+        isSample: true,
+        createdAt: Date.now() - 3600000 * 3
+      },
+      {
+        code: 'DR-102',
+        title: 'غسالة أوتوماتيك 7 كيلو نظيفة جداً وشغالة 100%',
+        category: 'أدوات منزلية',
+        condition: 'مستعمل - بحالة جيدة',
+        price: 2100000,
+        currency: 'ل.س',
+        area: 'إزرع',
+        description: 'غسالة حوض أوتوماتيك 7 كيلو، تنشيف ممتاز وصوت هادئ، استعمال عائلي خفيف ومفحوصة بالكامل وجاهزة للعمل.',
+        imageUrl: '',
+        sellerName: 'محمود الزعبي',
+        sellerPhone: '0944556677',
+        status: 'approved',
+        isSample: true,
+        createdAt: Date.now() - 3600000 * 8
+      },
+      {
+        code: 'DR-103',
+        title: 'طقم كنب عربي نظيف مع مساند وطاولة وسط',
+        category: 'أثاث ومفروشات',
+        condition: 'مستعمل - بحالة ممتازة',
+        price: 2950000,
+        currency: 'ل.س',
+        area: 'نوى',
+        description: 'طقم كنب عربي إسفنج ضغط عالي قماش نظيف جداً بدون أي تمزق، يتسع لـ 8 أشخاص مع كامل المساند والفرش.',
+        imageUrl: '',
+        sellerName: 'أبو خلدون النواوي',
+        sellerPhone: '0955889900',
+        status: 'approved',
+        isSample: true,
+        createdAt: Date.now() - 3600000 * 16
+      },
+      {
+        code: 'DR-104',
+        title: 'دراجة نارية 150 نظيفة جداً وموتور بحالة الوكالة',
+        category: 'سيارات ودراجات نارية',
+        condition: 'مستعمل - بحالة ممتازة',
+        price: 580,
+        currency: '$',
+        area: 'طفس',
+        description: 'دراجة 150 سي سي ناعمة جداً، دواليب جديدة، بطارية وإنارة كاملة، أوراق نظامية وجاهزة للفراغ فوراً.',
+        imageUrl: '',
+        sellerName: 'سامر الحريري',
+        sellerPhone: '0966778899',
+        status: 'approved',
+        isSample: true,
+        createdAt: Date.now() - 3600000 * 26
+      }
+    ];
+
+    let allListings = [];
+    let brokerSettings = {
+      brokerWhatsApp: '0995474645',
+      requireApproval: true,
+      adminPin: '1234'
+    };
+
+    let selectedCategory = 'all';
+    let adminStatusFilter = 'all';
+    let isAdminAuthenticated = false;
+    let currentDetailItem = null;
+    let uploadedSellerBase64 = '';
+    let uploadedAdminBase64 = '';
+
+    // Cloud DB Variables
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let listingsColRef = null;
+    let settingsDocRef = null;
+    let isCloudConnected = false;
+    let hasAttemptedInitialSeed = false;
+
+    // =========================================================================
+    // 2. INITIALIZE REAL-TIME CLOUD STORAGE (STRICT PATHS & AUTH FIRST)
+    // =========================================================================
+    async function initCloudConnection() {
+      try {
+        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+          const firebaseConfig = JSON.parse(__firebase_config);
+          const appId = typeof __app_id !== 'undefined' ? __app_id : 'daraa-market-live';
+          const app = initializeApp(firebaseConfig);
+          auth = getAuth(app);
+          db = getFirestore(app);
+
+          // RULE 3: Authenticate FIRST before any Firestore operations
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            await signInAnonymously(auth);
+          }
+          currentUser = auth.currentUser;
+
+          if (!currentUser) {
+            throw new Error('Auth user missing');
+          }
+
+          // RULE 1: Strict Paths under /artifacts/{appId}/public/data/
+          listingsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'listings');
+          settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'config', 'settings');
+          isCloudConnected = true;
+
+          // Real-time listener for Broker Config Settings
+          onSnapshot(
+            settingsDocRef,
+            async (docSnap) => {
+              if (docSnap.exists()) {
+                brokerSettings = { ...brokerSettings, ...docSnap.data() };
+                syncSettingsUI();
+              } else {
+                await setDoc(settingsDocRef, brokerSettings);
+              }
+            },
+            (err) => {
+              console.error('Config listener error:', err);
+            }
+          );
+
+          // Real-time listener for Listings (RULE 2: Simple collection query, sort in memory)
+          onSnapshot(
+            listingsColRef,
+            async (querySnap) => {
+              if (querySnap.empty && !hasAttemptedInitialSeed) {
+                hasAttemptedInitialSeed = true;
+                for (const seedItem of INITIAL_DARAA_SEED) {
+                  await addDoc(listingsColRef, seedItem);
+                }
+                return;
+              }
+
+              const items = [];
+              querySnap.forEach((d) => {
+                items.push({ id: d.id, ...d.data() });
+              });
+
+              // Sort newest first in memory
+              items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+              allListings = items;
+
+              hideLoadingSkeleton();
+              applyFilters();
+              updateAdminKPIsAndList();
+            },
+            (err) => {
+              console.error('Listings listener error:', err);
+              activateFallbackState();
+            }
+          );
+        } else {
+          activateFallbackState();
+        }
+      } catch (error) {
+        console.warn('Cloud initialization fallback:', error);
+        activateFallbackState();
+      }
+    }
+
+    function activateFallbackState() {
+      isCloudConnected = false;
+      allListings = INITIAL_DARAA_SEED.map((item, idx) => ({
+        id: 'local-' + (idx + 1),
+        ...item
+      }));
+      hideLoadingSkeleton();
+      syncSettingsUI();
+      applyFilters();
+      updateAdminKPIsAndList();
+    }
+
+    function hideLoadingSkeleton() {
+      const skeleton = document.getElementById('loadingGrid');
+      const grid = document.getElementById('productsGrid');
+      if (skeleton) skeleton.classList.add('hidden');
+      if (grid) {
+        grid.classList.remove('hidden');
+        grid.classList.add('grid');
+      }
+    }
+
+    // =========================================================================
+    // 3. PHONE FORMATTING, WHATSAPP LINKS & SHARE LINK UTILITIES
+    // =========================================================================
+    function toInternationalSyrianPhone(rawPhone) {
+      if (!rawPhone) return '963995474645';
+      let digits = String(rawPhone).replace(/[^\d]/g, '');
+      if (digits.startsWith('00')) digits = digits.slice(2);
+      if (digits.startsWith('09') && digits.length === 10) {
+        digits = '963' + digits.slice(1);
+      } else if (digits.startsWith('9') && digits.length === 9) {
+        digits = '963' + digits;
+      }
+      return digits || '963995474645';
+    }
+
+    function toLocalDisplayPhone(rawPhone) {
+      const intl = toInternationalSyrianPhone(rawPhone);
+      if (intl.startsWith('9639') && intl.length === 12) {
+        return '0' + intl.slice(3);
+      }
+      return rawPhone;
+    }
+
+    function formatPrice(price, currency) {
+      const num = Number(price) || 0;
+      const formatted = new Intl.NumberFormat('en-US').format(num);
+      return currency === '$' ? `${formatted} $` : `${formatted} ل.س`;
+    }
+
+    function buildBuyerWhatsAppUrl(item) {
+      const brokerIntl = toInternationalSyrianPhone(brokerSettings.brokerWhatsApp);
+      const priceText = formatPrice(item.price, item.currency);
+      const msg = [
+        `السلام عليكم وسيط سوق درعا الإلكتروني 🌿`,
+        `أرغب بشراء الغرض المعروض لديكم:`,
+        `• كود الإعلان: #${item.code}`,
+        `• الغرض: ${item.title}`,
+        `• السعر: ${priceText}`,
+        `• المنطقة: ${item.area}`,
+        `يرجى التنسيق لإتمام الشراء وشكراً.`
+      ].join('\n');
+      return `https://wa.me/${brokerIntl}?text=${encodeURIComponent(msg)}`;
+    }
+
+    function buildBrokerToSellerWhatsAppUrl(item) {
+      const sellerIntl = toInternationalSyrianPhone(item.sellerPhone);
+      const priceText = formatPrice(item.price, item.currency);
+      const msg = [
+        `السلام عليكم أخي ${item.sellerName || 'الكريم'} 🌿`,
+        `معك وسيط *سوق درعا الإلكتروني* بخصوص غرضك المعروض لدينا:`,
+        `• كود الإعلان: #${item.code}`,
+        `• الغرض: ${item.title} (${priceText})`,
+        `يوجد لدينا مشتري مهتم بالغرض، يرجى التواصل للتنسيق.`
+      ].join('\n');
+      return `https://wa.me/${sellerIntl}?text=${encodeURIComponent(msg)}`;
+    }
+
+    window.shareMarketLink = async function () {
+      const currentUrl = window.location.href;
+      // Copy via document.execCommand('copy') as required for iframe reliability
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = currentUrl;
+      tempTextArea.style.position = 'fixed';
+      tempTextArea.style.opacity = '0';
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      try {
+        document.execCommand('copy');
+      } catch (e) {
+        console.warn('Copy fallback:', e);
+      }
+      document.body.removeChild(tempTextArea);
+
+      // Also trigger native mobile share sheet if available
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'سوق درعا الإلكتروني',
+            text: 'بيع واشترِ بأمان في كافة مناطق درعا بإشراف الوسيط المعتمد:',
+            url: currentUrl
+          });
+          return;
+        } catch (err) {
+          // User closed share dialog; clipboard copy already succeeded
+        }
+      }
+
+      showToast('تم نسخ رابط سوق درعا الإلكتروني! الصقه الآن في واتساب أو فيسبوك لمشاركته.');
+    };
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const styleClass =
+        type === 'error'
+          ? 'bg-rose-600 text-white border-rose-500'
+          : type === 'warning'
+          ? 'bg-[#d97706] text-white border-amber-400'
+          : 'bg-[#059669] text-white border-emerald-400';
+
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-2xl border text-xs sm:text-sm font-extrabold flex items-center justify-between gap-3 animate-modal ${styleClass}`;
+      toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => toast.remove(), 260);
+      }, 4200);
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // =========================================================================
+    // 4. CLIENT-SIDE HTML5 CANVAS IMAGE COMPRESSION (MAX 800PX, JPEG 0.72)
+    // =========================================================================
+    function compressImageClientSide(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const maxWidth = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let compressed = canvas.toDataURL('image/jpeg', 0.72);
+            // Extra safeguard for Firestore 1MB document limit
+            if (compressed.length > 480000) {
+              compressed = canvas.toDataURL('image/jpeg', 0.52);
+            }
+            const sizeKb = Math.round((compressed.length * 3) / 4 / 1024);
+            resolve({ dataUrl: compressed, sizeKb });
+          };
+          img.onerror = () => reject(new Error('Invalid image file'));
+          img.src = e.target.result;
+        };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    window.handleImageFileSelect = async function (event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const statusEl = document.getElementById('imageUploadStatus');
+      statusEl.textContent = 'جاري ضغط وتجهيز الصورة...';
+      try {
+        const { dataUrl, sizeKb } = await compressImageClientSide(file);
+        uploadedSellerBase64 = dataUrl;
+        document.getElementById('sellImagePreview').src = dataUrl;
+        document.getElementById('sellImagePreviewBox').classList.remove('hidden');
+        statusEl.textContent = `✓ جاهزة (${sizeKb} KB)`;
+      } catch (err) {
+        statusEl.textContent = 'تعذر قراءة الصورة';
+        showToast('تعذر معالجة الصورة، يرجى اختيار صورة أخرى', 'error');
+      }
+    };
+
+    window.clearSelectedImage = function () {
+      uploadedSellerBase64 = '';
+      document.getElementById('sellImageFile').value = '';
+      document.getElementById('sellImagePreviewBox').classList.add('hidden');
+      document.getElementById('imageUploadStatus').textContent = '';
+    };
+
+    window.handleAdminImageFileSelect = async function (event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const statusEl = document.getElementById('adminImageUploadStatus');
+      statusEl.textContent = 'جاري ضغط الصورة...';
+      try {
+        const { dataUrl, sizeKb } = await compressImageClientSide(file);
+        uploadedAdminBase64 = dataUrl;
+        statusEl.textContent = `✓ تم تجهيز الصورة بنجاح (${sizeKb} KB)`;
+      } catch (err) {
+        statusEl.textContent = 'تعذر معالجة الصورة';
+      }
+    };
+
+    // =========================================================================
+    // 5. CATEGORY FALLBACK VISUAL & PUBLIC STOREFRONT RENDERING
+    // =========================================================================
+    function getCategoryMeta(categoryName) {
+      return CATEGORIES.find((c) => c.id === categoryName) || CATEGORIES[CATEGORIES.length - 1];
+    }
+
+    function renderVisualBlock(item, isSold, heightClass = 'aspect-[4/3]') {
+      const meta = getCategoryMeta(item.category);
+      if (item.imageUrl && item.imageUrl.trim().length > 10) {
+        return `
+          <img
+            src="${escapeHtml(item.imageUrl)}"
+            alt="${escapeHtml(item.title)}"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${isSold ? 'opacity-60 grayscale' : ''}"
+          />
+          <div style="display:none" class="w-full h-full bg-gradient-to-br ${meta.accent} flex-col items-center justify-center p-4 text-center text-white">
+            <span class="text-4xl mb-1.5">${meta.icon}</span>
+            <span class="text-xs font-extrabold text-white/90">${escapeHtml(item.category)}</span>
+          </div>
+        `;
+      }
+      return `
+        <div class="w-full h-full bg-gradient-to-br ${meta.accent} flex flex-col items-center justify-center p-4 text-center text-white ${isSold ? 'opacity-65 grayscale' : ''}">
+          <span class="text-4xl sm:text-5xl mb-2 drop-shadow">${meta.icon}</span>
+          <span class="text-xs font-extrabold text-white/90 px-3 py-1 rounded-full bg-white/10 border border-white/15">
+            ${escapeHtml(item.category)}
+          </span>
+        </div>
+      `;
+    }
+
+    function renderCategoryPills() {
+      const container = document.getElementById('categoryPills');
+      container.innerHTML = CATEGORIES.map((cat) => {
+        const active = selectedCategory === cat.id;
+        const btnClass = active
+          ? 'bg-[#059669] text-white border-[#059669] shadow-sm'
+          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700';
+        return `
+          <button
+            type="button"
+            onclick="selectCategory('${cat.id}')"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold border transition whitespace-nowrap cursor-pointer ${btnClass}"
+          >
+            <span>${cat.icon}</span>
+            <span>${cat.label}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    window.selectCategory = function (catId) {
+      selectedCategory = catId;
+      renderCategoryPills();
+      applyFilters();
+    };
+
+    window.resetFilters = function () {
+      selectedCategory = 'all';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('areaFilter').value = 'all';
+      document.getElementById('sortFilter').value = 'newest';
+      renderCategoryPills();
+      applyFilters();
+    };
+
+    window.applyFilters = function () {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const area = document.getElementById('areaFilter').value;
+      const sort = document.getElementById('sortFilter').value;
+
+      // Public view displays ONLY 'approved' and 'sold' items (never 'pending')
+      let list = allListings.filter((item) => item.status === 'approved' || item.status === 'sold');
+
+      if (selectedCategory !== 'all') {
+        list = list.filter((item) => item.category === selectedCategory);
+      }
+      if (area !== 'all') {
+        list = list.filter((item) => item.area === area);
+      }
+      if (query) {
+        list = list.filter(
+          (item) =>
+            (item.title && item.title.toLowerCase().includes(query)) ||
+            (item.description && item.description.toLowerCase().includes(query)) ||
+            (item.code && item.code.toLowerCase().includes(query)) ||
+            (item.area && item.area.toLowerCase().includes(query))
+        );
+      }
+
+      if (sort === 'price_asc') {
+        list.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      } else if (sort === 'price_desc') {
+        list.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      } else {
+        list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+
+      renderProductCards(list);
+    };
+
+    function renderProductCards(items) {
+      const grid = document.getElementById('productsGrid');
+      const emptyState = document.getElementById('emptyState');
+      const countBadge = document.getElementById('resultsCountBadge');
+
+      countBadge.textContent = `${items.length} إعلان`;
+
+      if (items.length === 0) {
+        grid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        emptyState.classList.add('flex');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      emptyState.classList.remove('flex');
+      grid.classList.remove('hidden');
+
+      grid.innerHTML = items
+        .map((item) => {
+          const isSold = item.status === 'sold';
+          const waUrl = buildBuyerWhatsAppUrl(item);
+          const priceStr = formatPrice(item.price, item.currency);
+
+          return `
+            <article class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#059669]/50 transition-all duration-200 flex flex-col">
+              <!-- Card Visual -->
+              <div onclick="openItemDetails('${item.id}')" class="relative aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden cursor-pointer">
+                ${renderVisualBlock(item, isSold)}
+
+                <!-- Status Badge -->
+                <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg text-xs font-black shadow ${
+                  isSold ? 'bg-rose-600 text-white' : 'bg-[#059669] text-white'
+                }">
+                  ${isSold ? 'تم البيع' : 'متاح'}
+                </span>
+
+                <!-- Listing Code Badge -->
+                <span dir="ltr" class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg text-[11px] font-black bg-[#0f172a]/85 text-white backdrop-blur-sm">
+                  #${escapeHtml(item.code)}
+                </span>
+
+                <!-- Area Tag -->
+                <span class="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 shadow-sm">
+                  📍 ${escapeHtml(item.area)}
+                </span>
+              </div>
+
+              <!-- Card Details (STRICT PRIVACY: NO SELLER NAME OR PHONE HERE) -->
+              <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between gap-2 text-[11px] font-extrabold">
+                    <span class="text-[#059669] dark:text-emerald-400 truncate">${escapeHtml(item.category)}</span>
+                    <span class="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-[#d97706] dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/50 shrink-0">
+                      ${escapeHtml(item.condition)}
+                    </span>
+                  </div>
+
+                  <h4 onclick="openItemDetails('${item.id}')" class="text-sm sm:text-base font-black text-slate-900 dark:text-white line-clamp-2 hover:text-[#059669] dark:hover:text-emerald-400 transition cursor-pointer">
+                    ${escapeHtml(item.title)}
+                  </h4>
+
+                  <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                    ${escapeHtml(item.description)}
+                  </p>
+                </div>
+
+                <div class="pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
+                  <div class="flex items-baseline justify-between">
+                    <span class="text-lg font-black text-[#059669] dark:text-emerald-400">
+                      ${priceStr}
+                    </span>
+                    <button type="button" onclick="openItemDetails('${item.id}')" class="text-xs font-extrabold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white underline cursor-pointer">
+                      التفاصيل
+                    </button>
+                  </div>
+
+                  ${
+                    isSold
+                      ? `<div class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-center text-xs font-extrabold">
+                          تم بيع هذا الغرض
+                        </div>`
+                      : `<a
+                          href="${waUrl}"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#059669] hover:bg-emerald-500 active:scale-[0.98] text-white text-xs font-extrabold shadow-sm shadow-emerald-600/20 transition cursor-pointer"
+                        >
+                          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+                          </svg>
+                          <span>اطلب عبر الوسيط (واتساب)</span>
+                        </a>`
+                  }
+                </div>
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+    }
+
+    // =========================================================================
+    // 6. PRODUCT DETAILS MODAL (PUBLIC - STRICT SELLER PRIVACY)
+    // =========================================================================
+    window.openItemDetails = function (itemId) {
+      const item = allListings.find((x) => x.id === itemId);
+      if (!item) return;
+      currentDetailItem = item;
+
+      const isSold = item.status === 'sold';
+      document.getElementById('detailCodeBadge').textContent = `#${item.code}`;
+
+      const statusBadge = document.getElementById('detailStatusBadge');
+      statusBadge.textContent = isSold ? 'تم البيع' : 'متاح للبيع';
+      statusBadge.className = `px-2.5 py-1 rounded-lg text-xs font-extrabold ${
+        isSold
+          ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400'
+          : 'bg-emerald-100 text-[#059669] dark:bg-emerald-950 dark:text-emerald-400'
+      }`;
+
+      document.getElementById('detailVisualContainer').innerHTML = renderVisualBlock(item, isSold);
+      document.getElementById('detailCategory').textContent = item.category;
+      document.getElementById('detailArea').textContent = `📍 ${item.area}`;
+      document.getElementById('detailCondition').textContent = item.condition;
+      document.getElementById('detailTitle').textContent = item.title;
+      document.getElementById('detailPrice').textContent = formatPrice(item.price, item.currency);
+      document.getElementById('detailDescription').textContent = item.description;
+
+      const waBtn = document.getElementById('detailWhatsAppBtn');
+      if (isSold) {
+        waBtn.classList.add('pointer-events-none', 'opacity-50');
+        waBtn.href = '#';
+      } else {
+        waBtn.classList.remove('pointer-events-none', 'opacity-50');
+        waBtn.href = buildBuyerWhatsAppUrl(item);
+      }
+
+      openModal('itemDetailsModal');
+    };
+
+    window.copyCurrentItemCode = function () {
+      if (!currentDetailItem) return;
+      const input = document.createElement('input');
+      input.value = currentDetailItem.code;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      showToast(`تم نسخ كود الإعلان: #${currentDetailItem.code}`);
+    };
+
+    // =========================================================================
+    // 7. VISITOR LISTING SUBMISSION HANDLER ("+ اعرض غرضك للبيع مجاناً")
+    // =========================================================================
+    window.openSellModal = function () {
+      document.getElementById('sellForm').reset();
+      clearSelectedImage();
+      openModal('sellModal');
+    };
+
+    window.handleSellerSubmit = async function (event) {
+      event.preventDefault();
+
+      const title = document.getElementById('sellTitle').value.trim();
+      const category = document.getElementById('sellCategory').value;
+      const condition = document.getElementById('sellCondition').value;
+      const price = Number(document.getElementById('sellPrice').value);
+      const currency = document.getElementById('sellCurrency').value;
+      const area = document.getElementById('sellArea').value;
+      const description = document.getElementById('sellDescription').value.trim();
+      const sellerName = document.getElementById('sellSellerName').value.trim();
+      const sellerPhone = document.getElementById('sellSellerPhone').value.trim();
+
+      if (!title || !price || !description || !sellerName || !sellerPhone) {
+        showToast('يرجى تعبئة جميع الحقول المطلوبة', 'error');
+        return;
+      }
+
+      const submitBtn = document.getElementById('sellSubmitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'جاري إرسال إعلانك إلى الوسيط...';
+
+      const uniqueCode = 'DR-' + Math.floor(100 + Math.random() * 900);
+      const targetStatus = brokerSettings.requireApproval ? 'pending' : 'approved';
+
+      const newListing = {
+        code: uniqueCode,
+        title,
+        category,
+        condition,
+        price,
+        currency,
+        area,
+        description,
+        imageUrl: uploadedSellerBase64 || '',
+        sellerName,
+        sellerPhone,
+        status: targetStatus,
+        isSample: false,
+        createdAt: Date.now()
+      };
+
+      try {
+        if (isCloudConnected && currentUser && listingsColRef) {
+          await addDoc(listingsColRef, newListing);
+        } else {
+          allListings.unshift({ id: 'local-' + Date.now(), ...newListing });
+          applyFilters();
+          updateAdminKPIsAndList();
+        }
+
+        closeModal('sellModal');
+        if (targetStatus === 'pending') {
+          showToast(
+            `تم استلام إعلانك بنجاح برقم (#${uniqueCode})! سيقوم الوسيط بمراجعته ونشره في السوق والتواصل معك عبر واتساب عند وجود مشتري.`,
+            'success'
+          );
+        } else {
+          showToast(`تم نشر إعلانك مباشرة في سوق درعا برقم (#${uniqueCode})!`, 'success');
+        }
+      } catch (err) {
+        console.error('Submission error:', err);
+        showToast('حدث خطأ أثناء الإرسال، يرجى المحاولة مرة أخرى.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'إرسال الغرض إلى الوسيط';
+      }
+    };
+
+    // =========================================================================
+    // 8. BROKER ADMIN PANEL ("إدارة الوسيط")
+    // =========================================================================
+    window.openAdminAccess = function () {
+      if (isAdminAuthenticated) {
+        updateAdminKPIsAndList();
+        openModal('adminDashboardModal');
+      } else {
+        document.getElementById('adminPinInput').value = '';
+        document.getElementById('pinErrorText').classList.add('hidden');
+        openModal('adminPinModal');
+        setTimeout(() => document.getElementById('adminPinInput').focus(), 100);
+      }
+    };
+
+    window.verifyAdminPin = function (event) {
+      event.preventDefault();
+      const pinVal = document.getElementById('adminPinInput').value.trim();
+      if (pinVal === String(brokerSettings.adminPin)) {
+        isAdminAuthenticated = true;
+        closeModal('adminPinModal');
+        updateAdminKPIsAndList();
+        openModal('adminDashboardModal');
+        showToast('أهلاً بك في لوحة إدارة الوسيط');
+      } else {
+        document.getElementById('pinErrorText').classList.remove('hidden');
+      }
+    };
+
+    window.logoutAdmin = function () {
+      isAdminAuthenticated = false;
+      closeModal('adminDashboardModal');
+      showToast('تم قفل لوحة إدارة الوسيط');
+    };
+
+    window.switchAdminTab = function (tab) {
+      const mapping = [
+        { key: 'listings', btn: 'tabBtnListings', panel: 'adminTabListings' },
+        { key: 'directAdd', btn: 'tabBtnDirectAdd', panel: 'adminTabDirectAdd' },
+        { key: 'settings', btn: 'tabBtnSettings', panel: 'adminTabSettings' }
+      ];
+      mapping.forEach((m) => {
+        const btnEl = document.getElementById(m.btn);
+        const panelEl = document.getElementById(m.panel);
+        if (m.key === tab) {
+          btnEl.classList.add('border-[#059669]', 'text-[#059669]', 'dark:text-emerald-400', 'font-black');
+          btnEl.classList.remove('border-transparent', 'text-slate-500');
+          panelEl.classList.remove('hidden');
+        } else {
+          btnEl.classList.remove('border-[#059669]', 'text-[#059669]', 'dark:text-emerald-400', 'font-black');
+          btnEl.classList.add('border-transparent', 'text-slate-500');
+          panelEl.classList.add('hidden');
+        }
+      });
+    };
+
+    window.setAdminStatusFilter = function (filterVal) {
+      adminStatusFilter = filterVal;
+      const buttons = {
+        pending: 'adminFilterPending',
+        approved: 'adminFilterApproved',
+        sold: 'adminFilterSold',
+        all: 'adminFilterAll'
+      };
+      Object.entries(buttons).forEach(([key, elId]) => {
+        const el = document.getElementById(elId);
+        if (key === filterVal) {
+          el.className = 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-[#059669] text-white cursor-pointer';
+        } else {
+          el.className = 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer';
+        }
+      });
+      renderAdminListings();
+    };
+
+    function updateAdminKPIsAndList() {
+      const pendingCount = allListings.filter((i) => i.status === 'pending').length;
+      const approvedCount = allListings.filter((i) => i.status === 'approved').length;
+      const soldCount = allListings.filter((i) => i.status === 'sold').length;
+      const totalCount = allListings.length;
+
+      document.getElementById('kpiPendingCount').textContent = pendingCount;
+      document.getElementById('kpiApprovedCount').textContent = approvedCount;
+      document.getElementById('kpiSoldCount').textContent = soldCount;
+      document.getElementById('kpiTotalCount').textContent = totalCount;
+
+      const badge = document.getElementById('pendingBadgeHeader');
+      if (pendingCount > 0) {
+        badge.textContent = pendingCount;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      if (isAdminAuthenticated) {
+        renderAdminListings();
+      }
+    }
+
+    window.renderAdminListings = function () {
+      const container = document.getElementById('adminListingsContainer');
+      const query = (document.getElementById('adminSearchInput')?.value || '').trim().toLowerCase();
+
+      let list = [...allListings];
+      if (adminStatusFilter !== 'all') {
+        list = list.filter((i) => i.status === adminStatusFilter);
+      }
+      if (query) {
+        list = list.filter(
+          (i) =>
+            (i.title && i.title.toLowerCase().includes(query)) ||
+            (i.code && i.code.toLowerCase().includes(query)) ||
+            (i.sellerName && i.sellerName.toLowerCase().includes(query)) ||
+            (i.sellerPhone && i.sellerPhone.toLowerCase().includes(query))
+        );
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-800">
+            لا توجد إعلانات مطابقة في هذا التبويب حالياً.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list
+        .map((item) => {
+          const isPending = item.status === 'pending';
+          const isSold = item.status === 'sold';
+          const statusChip = isPending
+            ? '<span class="px-2 py-0.5 rounded-md text-[11px] font-black bg-amber-100 text-[#d97706] dark:bg-amber-950 dark:text-amber-300">⏳ بانتظار الموافقة</span>'
+            : isSold
+            ? '<span class="px-2 py-0.5 rounded-md text-[11px] font-black bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300">تم البيع</span>'
+            : '<span class="px-2 py-0.5 rounded-md text-[11px] font-black bg-emerald-100 text-[#059669] dark:bg-emerald-950 dark:text-emerald-300">✓ منشور حالياً</span>';
+
+          const hasPhone = item.sellerPhone && item.sellerPhone.trim().length > 0;
+          const sellerWaUrl = hasPhone ? buildBrokerToSellerWhatsAppUrl(item) : '#';
+
+          return `
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              
+              <!-- Item & Private Seller Box -->
+              <div class="flex items-start gap-3.5">
+                <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+                  ${renderVisualBlock(item, isSold)}
+                </div>
+                <div class="space-y-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span dir="ltr" class="text-xs font-black text-slate-600 dark:text-slate-300">#${escapeHtml(item.code)}</span>
+                    ${statusChip}
+                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400">📍 ${escapeHtml(item.area)}</span>
+                  </div>
+                  <h5 class="text-sm font-black text-slate-900 dark:text-white">${escapeHtml(item.title)}</h5>
+                  <div class="text-sm font-black text-[#059669] dark:text-emerald-400">${formatPrice(item.price, item.currency)}</div>
+
+                  <!-- Private Seller Box (Admin Only) -->
+                  <div class="mt-1.5 inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50/90 dark:bg-amber-950/30 border border-amber-300/70 dark:border-amber-800/60 text-xs">
+                    <span class="font-black text-amber-950 dark:text-amber-200">
+                      🔒 بيانات البائع السرية: ${escapeHtml(item.sellerName || 'الوسيط مباشرة')}
+                    </span>
+                    ${
+                      hasPhone
+                        ? `<span dir="ltr" class="font-extrabold text-slate-700 dark:text-slate-300">(${escapeHtml(item.sellerPhone)})</span>
+                           <a href="${sellerWaUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#059669] hover:bg-emerald-500 text-white font-extrabold text-[11px] transition">
+                             واتساب البائع ↗
+                           </a>`
+                        : ''
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Broker Action Buttons -->
+              <div class="flex flex-wrap items-center gap-2 shrink-0">
+                ${
+                  isPending
+                    ? `<button type="button" onclick="updateListingStatus('${item.id}', 'approved')" class="px-3.5 py-2 rounded-xl bg-[#059669] hover:bg-emerald-500 text-white text-xs font-black transition cursor-pointer">
+                        ✓ نشر في السوق
+                      </button>`
+                    : ''
+                }
+
+                ${
+                  item.status === 'approved'
+                    ? `<button type="button" onclick="updateListingStatus('${item.id}', 'sold')" class="px-3 py-2 rounded-xl bg-[#d97706] hover:bg-amber-500 text-white text-xs font-extrabold transition cursor-pointer">
+                        تم البيع
+                      </button>`
+                    : ''
+                }
+
+                ${
+                  isSold
+                    ? `<button type="button" onclick="updateListingStatus('${item.id}', 'approved')" class="px-3 py-2 rounded-xl bg-emerald-600/20 text-[#059669] dark:text-emerald-300 border border-emerald-500/40 text-xs font-extrabold transition cursor-pointer">
+                        إعادة تفعيل
+                      </button>`
+                    : ''
+                }
+
+                <button type="button" onclick="openEditItemModal('${item.id}')" class="px-3 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-extrabold transition cursor-pointer">
+                  تعديل السعر
+                </button>
+
+                <button type="button" onclick="confirmDeleteItem('${item.id}')" class="px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/50 text-xs font-extrabold transition cursor-pointer">
+                  حذف
+                </button>
+              </div>
+
+            </div>
+          `;
+        })
+        .join('');
+    };
+
+    window.updateListingStatus = async function (itemId, newStatus) {
+      try {
+        if (isCloudConnected && currentUser && db) {
+          const appId = typeof __app_id !== 'undefined' ? __app_id : 'daraa-market-live';
+          await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'listings', itemId), {
+            status: newStatus
+          });
+        } else {
+          const idx = allListings.findIndex((i) => i.id === itemId);
+          if (idx !== -1) allListings[idx].status = newStatus;
+          applyFilters();
+          updateAdminKPIsAndList();
+        }
+        showToast(
+          newStatus === 'approved'
+            ? 'تم نشر الغرض في السوق وهو متاح الآن لجميع الزوار'
+            : newStatus === 'sold'
+            ? 'تم تحديث حالة الغرض إلى (تم البيع)'
+            : 'تم تحديث الحالة'
+        );
+      } catch (err) {
+        console.error('Status update error:', err);
+        showToast('تعذر تحديث حالة الإعلان', 'error');
+      }
+    };
+
+    window.openEditItemModal = function (itemId) {
+      const item = allListings.find((i) => i.id === itemId);
+      if (!item) return;
+      document.getElementById('editItemId').value = item.id;
+      document.getElementById('editTitle').value = item.title;
+      document.getElementById('editPrice').value = item.price;
+      document.getElementById('editCurrency').value = item.currency;
+      document.getElementById('editArea').value = item.area;
+      document.getElementById('editStatus').value = item.status;
+      document.getElementById('editDescription').value = item.description;
+      openModal('editItemModal');
+    };
+
+    window.handleSaveEditItem = async function (event) {
+      event.preventDefault();
+      const itemId = document.getElementById('editItemId').value;
+      const updates = {
+        title: document.getElementById('editTitle').value.trim(),
+        price: Number(document.getElementById('editPrice').value),
+        currency: document.getElementById('editCurrency').value,
+        area: document.getElementById('editArea').value,
+        status: document.getElementById('editStatus').value,
+        description: document.getElementById('editDescription').value.trim()
+      };
+
+      try {
+        if (isCloudConnected && currentUser && db) {
+          const appId = typeof __app_id !== 'undefined' ? __app_id : 'daraa-market-live';
+          await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'listings', itemId), updates);
+        } else {
+          const idx = allListings.findIndex((i) => i.id === itemId);
+          if (idx !== -1) allListings[idx] = { ...allListings[idx], ...updates };
+          applyFilters();
+          updateAdminKPIsAndList();
+        }
+        closeModal('editItemModal');
+        showToast('تم حفظ التعديلات بنجاح');
+      } catch (err) {
+        console.error('Save edit error:', err);
+        showToast('تعذر حفظ التعديلات', 'error');
+      }
+    };
+
+    window.handleAdminDirectAdd = async function (event) {
+      event.preventDefault();
+      const title = document.getElementById('adminAddTitle').value.trim();
+      const category = document.getElementById('adminAddCategory').value;
+      const condition = document.getElementById('adminAddCondition').value;
+      const price = Number(document.getElementById('adminAddPrice').value);
+      const currency = document.getElementById('adminAddCurrency').value;
+      const area = document.getElementById('adminAddArea').value;
+      const description = document.getElementById('adminAddDescription').value.trim();
+      const sellerName = document.getElementById('adminAddSellerName').value.trim() || 'الوسيط المعتمد';
+      const sellerPhone = document.getElementById('adminAddSellerPhone').value.trim();
+
+      const uniqueCode = 'DR-' + Math.floor(100 + Math.random() * 900);
+      const newListing = {
+        code: uniqueCode,
+        title,
+        category,
+        condition,
+        price,
+        currency,
+        area,
+        description,
+        imageUrl: uploadedAdminBase64 || '',
+        sellerName,
+        sellerPhone,
+        status: 'approved',
+        isSample: false,
+        createdAt: Date.now()
+      };
+
+      try {
+        if (isCloudConnected && currentUser && listingsColRef) {
+          await addDoc(listingsColRef, newListing);
+        } else {
+          allListings.unshift({ id: 'local-' + Date.now(), ...newListing });
+          applyFilters();
+          updateAdminKPIsAndList();
+        }
+
+        document.getElementById('adminAddForm').reset();
+        uploadedAdminBase64 = '';
+        document.getElementById('adminImageUploadStatus').textContent = '';
+        switchAdminTab('listings');
+        showToast(`تم نشر الإعلان المباشر بنجاح (#${uniqueCode})`);
+      } catch (err) {
+        console.error('Direct add error:', err);
+        showToast('تعذر نشر الإعلان', 'error');
+      }
+    };
+
+    // =========================================================================
+    // 9. BROKER SETTINGS & DELETE CONFIRMATION DIALOGS
+    // =========================================================================
+    function syncSettingsUI() {
+      const displayWa = toLocalDisplayPhone(brokerSettings.brokerWhatsApp);
+      const intlWa = toInternationalSyrianPhone(brokerSettings.brokerWhatsApp);
+      const headerLink = document.getElementById('headerBrokerWaLink');
+      if (headerLink) {
+        headerLink.textContent = displayWa;
+        headerLink.href = `https://wa.me/${intlWa}`;
+      }
+
+      const settingPhone = document.getElementById('settingBrokerPhone');
+      const settingApproval = document.getElementById('settingRequireApproval');
+      const settingPin = document.getElementById('settingAdminPin');
+      if (settingPhone) settingPhone.value = brokerSettings.brokerWhatsApp;
+      if (settingApproval) settingApproval.checked = Boolean(brokerSettings.requireApproval);
+      if (settingPin) settingPin.value = brokerSettings.adminPin;
+    }
+
+    window.saveBrokerSettings = async function (event) {
+      event.preventDefault();
+      const rawPhone = document.getElementById('settingBrokerPhone').value.trim();
+      const requireApproval = document.getElementById('settingRequireApproval').checked;
+      const newPin = document.getElementById('settingAdminPin').value.trim();
+
+      if (!rawPhone || newPin.length < 4) {
+        showToast('يرجى إدخال رقم واتساب صحيح ورمز PIN من 4 أرقام على الأقل', 'error');
+        return;
+      }
+
+      const updatedSettings = {
+        brokerWhatsApp: rawPhone,
+        requireApproval,
+        adminPin: newPin
+      };
+
+      try {
+        if (isCloudConnected && currentUser && settingsDocRef) {
+          await setDoc(settingsDocRef, updatedSettings);
+        } else {
+          brokerSettings = updatedSettings;
+          syncSettingsUI();
+        }
+        showToast('تم حفظ إعدادات الوسيط بنجاح');
+      } catch (err) {
+        console.error('Save settings error:', err);
+        showToast('تعذر حفظ الإعدادات', 'error');
+      }
+    };
+
+    function openCustomConfirm(title, message, onConfirm) {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmMessage').textContent = message;
+      const execBtn = document.getElementById('confirmExecuteBtn');
+      execBtn.onclick = async () => {
+        closeModal('customConfirmModal');
+        await onConfirm();
+      };
+      openModal('customConfirmModal');
+    }
+
+    window.confirmDeleteItem = function (itemId) {
+      openCustomConfirm(
+        'حذف الإعلان نهائياً',
+        'هل أنت متأكد من حذف هذا الإعلان من سوق درعا؟ لا يمكن التراجع عن الحذف.',
+        async () => {
+          try {
+            if (isCloudConnected && currentUser && db) {
+              const appId = typeof __app_id !== 'undefined' ? __app_id : 'daraa-market-live';
+              await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'listings', itemId));
+            } else {
+              allListings = allListings.filter((i) => i.id !== itemId);
+              applyFilters();
+              updateAdminKPIsAndList();
+            }
+            showToast('تم حذف الإعلان بنجاح');
+          } catch (err) {
+            console.error('Delete item error:', err);
+            showToast('تعذر حذف الإعلان', 'error');
+          }
+        }
+      );
+    };
+
+    window.confirmDeleteSampleItems = function () {
+      openCustomConfirm(
+        'حذف الإعلانات التجريبية',
+        'سيتم حذف الأمثلة الأربعة الافتراضية دفعة واحدة والإبقاء على إعلاناتك الحقيقية فقط.',
+        async () => {
+          const samples = allListings.filter((i) => i.isSample);
+          if (samples.length === 0) {
+            showToast('لا توجد إعلانات تجريبية حالياً', 'warning');
+            return;
+          }
+          try {
+            if (isCloudConnected && currentUser && db) {
+              const appId = typeof __app_id !== 'undefined' ? __app_id : 'daraa-market-live';
+              for (const s of samples) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'listings', s.id));
+              }
+            } else {
+              allListings = allListings.filter((i) => !i.isSample);
+              applyFilters();
+              updateAdminKPIsAndList();
+            }
+            showToast(`تم حذف ${samples.length} إعلانات تجريبية بنجاح`);
+          } catch (err) {
+            console.error('Sample delete error:', err);
+            showToast('حدث خطأ أثناء حذف الإعلانات التجريبية', 'error');
+          }
+        }
+      );
+    };
+
+    // =========================================================================
+    // 10. MODAL & THEME HELPERS
+    // =========================================================================
+    window.openModal = function (id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
+    };
+
+    window.closeModal = function (id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
+    };
+
+    window.toggleTheme = function () {
+      document.documentElement.classList.toggle('dark');
+    };
+
+    ['itemDetailsModal', 'sellModal', 'adminPinModal', 'editItemModal', 'customConfirmModal'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', (e) => {
+          if (e.target === el) closeModal(id);
+        });
+      }
+    });
+
+    // Start Application
+    renderCategoryPills();
+    syncSettingsUI();
+    initCloudConnection();
+  </script>
+</body>
+</html>
